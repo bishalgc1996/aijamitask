@@ -33,13 +33,7 @@ class Configure_Menu
         add_action('admin_menu', array($this, 'post_remove'));
         add_filter('mod_rewrite_rules', array($this, 'fix_cache'));
 
-        function output_htaccess( $rules ) {
-          $new_rules = <<<EOD
-        Add your new rules here
-        EOD;
-          return $rules . $new_rules;
-        }
-        add_filter('mod_rewrite_rules', 'output_htaccess');
+       
 
     }
 
