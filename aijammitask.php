@@ -10,7 +10,7 @@
  * Author: Bishal GC
  * Author URI: bishalgc.com
  * Text Domain: aijammitask
- * Domain Path: /languages
+ * Domain Path: /languages/
  */
 
 /* Copyright Bishal GC (email : gcbishal03@gmail.com)

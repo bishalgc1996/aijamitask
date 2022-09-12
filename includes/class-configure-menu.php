@@ -31,9 +31,8 @@ class Configure_Menu
         $this->adminpage_url = admin_url('admin.php?page=home_marketing_page');
         add_action('admin_menu', array($this, 'add_menu_pages'));
         add_action('admin_menu', array($this, 'post_remove'));
-        add_filter('mod_rewrite_rules', array($this, 'fix_cache'));
-
-       
+        add_action('plugins_loaded', array($this, 'fix_cache'));
+        add_action( 'plugins_loaded', array($this, 'load_plugin_textdomain') );
 
     }
 
@@ -45,7 +44,7 @@ class Configure_Menu
      */
     public function add_menu_pages()
     {
-        add_menu_page(__('Analytique', 'aijammitask'), __('Analytique', 'aijammitask'), 'manage_options', 'home_marketing_page', array($this, 'home_marketing_page'), 'dashicons-dashboard', '30');
+        add_menu_page(__('Analytics', 'aijammitask'), __('Analytics', 'aijammitask'), 'manage_options', 'home_marketing_page', array($this, 'home_marketing_page'), 'dashicons-dashboard', '30');
         add_menu_page(__('Ordres', 'aijammitask'), __('Ordres', 'aijammitask'), 'manage_options', 'home_marketing_page', array($this, 'home_marketing_page'), 'dashicons-cloud-saved', '31');
         add_menu_page(__('des produits', 'aijammitask'), __('des produits', 'aijammitask'), 'manage_options', 'home_marketing_page', array($this, 'home_marketing_page'), 'dashicons-products', '32');
         add_menu_page(__('clients', 'aijammitask'), __('clients', 'aijammitask'), 'manage_options', 'home_marketing_page', array($this, 'home_marketing_page'), 'dashicons-admin-users', '33');
@@ -93,50 +92,19 @@ class Configure_Menu
         remove_menu_page('users.php');
     }
 
-    public function fix_cache($rules)
+    public function fix_cache()
     {
 
-      $new_rules = '# TN - START EXPIRES CACHE 
-      ExpiresActive On
-      ExpiresByType text/css "access 1 month"
-      ExpiresByType text/html "access 1 month"
-      ExpiresByType image/gif "access 1 year"
-      ExpiresByType image/png "access 1 year"
-      ExpiresByType image/jpg "access 1 year"
-      ExpiresByType image/jpeg "access 1 year"
-      ExpiresByType image/svg "access 1 year"
-      ExpiresByType image/x-icon "access 1 year"
-      ExpiresByType application/pdf "access 1 month"
-      ExpiresByType application/xhtml-xml "access 1 month"
-      ExpiresByType application/javascript "access 1 month" 
-      ExpiresByType text/x-javascript "access 1 month"
-      ExpiresByType application/x-shockwave-flash "access 1 month"
-      ExpiresDefault "access 1 month"
-      # TN - END EXPIRES CACHE
-      
-      
-      # TN - BEGIN Cache-Control Headers
-      <ifModule mod_headers.c>
-      <filesMatch "\.(ico|jpeg|jpg|png|gif|swf|pdf|svg)$">
-      Header set Cache-Control "public"
-      </filesMatch>
-      <filesMatch "\.(css)$">
-      Header set Cache-Control "public"
-      </filesMatch>
-      <filesMatch "\.(js)$">
-      Header set Cache-Control "private"
-      </filesMatch>
-      <filesMatch "\.(x?html?|php)$">
-      Header set Cache-Control "private, must-revalidate"
-      </filesMatch>
-      </ifModule>
-      # TN - END Cache-Control Headers
-      
-      
-      # TN - BEGIN Turn ETags Off
-      FileETag None
-      # TN - END Turn ETags Off';
-        return $rules . $new_rules;
-    
+        header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
+
+    }
+
+    public function  load_plugin_textdomain() {
+        load_plugin_textdomain( 'aijammitask', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
+        
     }
 }
